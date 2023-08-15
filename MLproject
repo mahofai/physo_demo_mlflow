@@ -1,0 +1,14 @@
+name: physo
+
+conda_env: physo.yml
+
+entry_points:
+  main:
+    parameters:
+      train_data: { type: str, help: 'path to train data csv', default :  "./data/train.csv"}
+      test_data: { type: str, help: 'path to test data csv', default :  "./data/test.csv"}
+    command: "demo_quick_sr.py \
+    --test_data {test_data} \
+    --test_n_fold {test_n_fold} \
+    "
+               
