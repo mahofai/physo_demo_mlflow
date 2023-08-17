@@ -7,7 +7,7 @@
 
 import mlflow
 import mlflow.pyfunc
-from mlflow import log_metric, log_param, log_artifact
+from mlflow import log_metric, log_param, log_artifact, log_text
 
 # External packages
 import numpy as np
@@ -17,13 +17,12 @@ import physo
 import argparse
 
 parser = argparse.ArgumentParser(description='download parser')
-parser.add_argument('--train_data', type=str, help='path to train data csv', default = "./data/train.csv")
-parser.add_argument('--test_data', type=str, help='path to train data csv', default = "./data/test.csv")
+parser.add_argument('--y_name', type=str, help='path to train data csv', default ="E")
+parser.add_argument('--y_units', type=lambda x: [float(i) for i in x.split()], help='path to train data csv', default = [2, -2, 1])
 args = parser.parse_args()
 
 # Guard for spawn systems (typically MACs/Windows)
 if __name__ == '__main__':
-    print("args_train_data:",args.train_data)
 
     # ### Dataset
 
@@ -96,9 +95,9 @@ if __name__ == '__main__':
                                     # Giving units of input variables
                                     X_units = [ [1, 0, 0] , [1, -1, 0] ],
                                     # Giving name of root variable (for display purposes)
-                                    y_name  = "E",
+                                    y_name  = args.y_name,
                                     # Giving units of the root variable
-                                    y_units = [2, -2, 1],
+                                    y_units = args.y_units,
                                     # Fixed constants
                                     fixed_consts       = [ 1.      ],
                                     # Units of fixed constants
@@ -119,17 +118,17 @@ if __name__ == '__main__':
         # In ascii
         print("\nIn ascii:")
         print(expression.get_infix_pretty(do_simplify=True))
-        mlflow.log_metric("In_ascii", expression.get_infix_pretty(do_simplify=True))
+        mlflow.log_text( expression.get_infix_pretty(do_simplify=True),"In_ascii_info")
         # In latex
         print("\nIn latex")
         print(expression.get_infix_latex(do_simplify=True))
-        mlflow.log_metric("In_latex", expression.get_infix_latex(do_simplify=True))
+        mlflow.log_text( expression.get_infix_latex(do_simplify=True),"\nIn latex")
         # Free constants values
         print("\nFree constants values")
         print(expression.free_const_values.cpu().detach().numpy())
-        mlflow.log_metric("Free_constants_values", expression.free_const_values.cpu().detach().numpy())
+        # mlflow.log_metric("Free_constants_values", expression.free_const_values.cpu().detach().numpy())
         
-        mlflow.log_metric("args_test_data:",args.test_data)
+        # mlflow.log_metric("args_test_data:",args.test_data)
 
         # ### Inspecting pareto front expressions
 
@@ -138,20 +137,21 @@ if __name__ == '__main__':
         # Inspecting pareto front expressions
         pareto_front_complexities, pareto_front_expressions, pareto_front_r, pareto_front_rmse = logs.get_pareto_front()
         for i, prog in enumerate(pareto_front_expressions):
+            str = ""
+            str += prog.get_infix_pretty(do_simplify=True)+"\n"
             # Showing expression
             print(prog.get_infix_pretty(do_simplify=True))
             # Showing free constant
             free_consts = prog.free_const_values.detach().cpu().numpy()
             for j in range (len(free_consts)):
                 print("%s = %f"%(prog.library.free_const_names[j], free_consts[j]))
+                str += "!!!%s = %f"%(prog.library.free_const_names[j], free_consts[j])+"\n"
             # Showing RMSE
             print("RMSE = {:e}".format(pareto_front_rmse[i]))
+            str += "RMSE = {:e}".format(pareto_front_rmse[i])+"\n"
             print("-------------\n")
-
+            str += "-------------\n"+"\n"
+            mlflow.log_text(str, f"pareto_front_expressions {i}")
 
         # In[ ]:
         mlflow.end_run()
-
-
-
-
