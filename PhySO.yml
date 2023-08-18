@@ -1,5 +1,6 @@
-name: PhySO1
+name: PhySO
 channels:
+  - conda-forge/label/cf201901
   - conda-forge
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/pytorch/
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/peterjc123/
@@ -31,7 +32,7 @@ dependencies:
   - brotli-bin=1.0.9=h166bdaf_9
   - brotli-python=1.0.9=py38hfa26641_9
   - bzip2=1.0.8=h7f98852_4
-  - ca-certificates=2023.7.22=hbcca054_0
+  - ca-certificates=2018.11.29=ha4d7672_0
   - cached-property=1.5.2=hd8ed1ab_1
   - cached_property=1.5.2=pyha770c72_1
   - cairo=1.16.0=hbbf8b49_1016
