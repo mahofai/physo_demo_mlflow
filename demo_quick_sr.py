@@ -16,8 +16,8 @@ import matplotlib.pyplot as plt
 import physo
 import argparse
 
-parser = argparse.ArgumentParser(description='download parser')
-parser.add_argument('--y_name', type=str, help='path to train data csv', default ="E")
+parser = argparse.ArgumentParser(description='parser')
+parser.add_argument('--y_name', type=str, help='y name', default ="E")
 parser.add_argument('--y_units', type=lambda x: [float(i) for i in x.split()], help='path to train data csv', default = [2, -2, 1])
 args = parser.parse_args()
 
