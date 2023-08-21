@@ -7,7 +7,7 @@ entry_points:
     parameters:
       y_name: { type: str, help: 'y name', default : "E"}
       y_units: { type: str, help: 'y unit', default :  "2 -2 1"}
-    command: "demo_quick_sr.py \
+    command: "python demo_quick_sr.py \
     --y_name {y_name} \
     --y_units {y_units} \
     "
