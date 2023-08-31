@@ -15,14 +15,37 @@ import matplotlib.pyplot as plt
 # Internal code import
 import physo
 import argparse
+import pandas as pd
+import csv
+
+# using resource 
+import resource
+  
+def limit_memory(maxsize):
+    soft, hard = resource.getrlimit(resource.RLIMIT_AS)
+    resource.setrlimit(resource.RLIMIT_AS, (maxsize, hard))
 
 parser = argparse.ArgumentParser(description='parser')
-parser.add_argument('--y_name', type=str, help='y name', default ="E")
-parser.add_argument('--y_units', type=lambda x: [float(i) for i in x.split()], help='path to train data csv', default = [2, -2, 1])
+parser.add_argument('--train_data', type=str, help='csv data path', default ="")
+
+parser.add_argument('--y_name', type=str, help='name of root variable', default ="E")
+parser.add_argument('--y_units', type=lambda x: [float(i) for i in x.split()], help='units of the root variable', default = [2, -2, 1])
+
+parser.add_argument('--X_names', type=lambda x: [float(i) for i in x.split()], help='names of variables', default = [ "z"       , "v"        ])
+parser.add_argument('--X_units', type=lambda x: [float(i) for i in x.split()], help='nits of input variables', default = [ [1, 0, 0] , [1, -1, 2], ])
+
+parser.add_argument('--fixed_consts', type=lambda x: [float(i) for i in x.split()], help='Fixed constants', default = [ 1.      ])
+parser.add_argument('--fixed_consts_units', type=lambda x: [float(i) for i in x.split()], help='Units of fixed constants', default = [ [0,0,0] ])
+
+parser.add_argument('--free_consts_names', type=lambda x: [float(i) for i in x.split()], help='Free constants names', default = [ "m"       , "g"      ])
+parser.add_argument('--free_consts_units', type=lambda x: [float(i) for i in x.split()], help='Units of Free constants', default = [ [0, 0, 1] , [1, -2, 0] ])
+
 args = parser.parse_args()
 
 # Guard for spawn systems (typically MACs/Windows)
 if __name__ == '__main__':
+    # limit cpu memory usage as 4g
+    limit_memory(1024*1024*1024*20)
 
     # ### Dataset
 
@@ -33,6 +56,13 @@ if __name__ == '__main__':
     v = np.random.uniform(-10, 10, 50)
     X = np.stack((z, v), axis=0)
     y = 1.234*9.807*z + 1.234*v**2
+    print("X:",X)
+    print("y:",y)
+    df = pd.DataFrame({'z': z, 'v':v, 'y':y})
+    print("!!!!df:",df)
+    df.to_csv("demo_data.csv", index=False)
+    
+    
 
 
     # Where $X=(z,v)$, $z$ being a length of dimension $L^{1}, T^{0}, M^{0}$, v a velocity of dimension $L^{1}, T^{-1}, M^{0}$, $y=E$ if an energy of dimension $L^{2}, T^{-2}, M^{1}$.
@@ -44,14 +74,13 @@ if __name__ == '__main__':
     # In[3]:
 
 
-    n_dim = X.shape[0]
-    fig, ax = plt.subplots(n_dim, 1, figsize=(10,5))
-    for i in range (n_dim):
-        curr_ax = ax if n_dim==1 else ax[i]
-        curr_ax.plot(X[i], y, 'k.',) # type: ignore
-        curr_ax.set_xlabel("X[%i]"%(i)) # type: ignore
-        curr_ax.set_ylabel("y") # type: ignore
-        
+    # n_dim = X.shape[0]
+    # fig, ax = plt.subplots(n_dim, 1, figsize=(10,5))
+    # for i in range (n_dim):
+    #     curr_ax = ax if n_dim==1 else ax[i]
+    #     curr_ax.plot(X[i], y, 'k.',) # type: ignore
+    #     curr_ax.set_xlabel("X[%i]"%(i)) # type: ignore
+    #     curr_ax.set_ylabel("y") # type: ignore
     # plt.show()
 
 
@@ -84,28 +113,27 @@ if __name__ == '__main__':
     # In[4]:
 
     with mlflow.start_run() as run:
-
         # mlflow.log_figure(fig, "image.png")
         print("physo.config.config0.config0", physo.config.config0.config0)
 
         # Running SR task
         expression, logs = physo.SR(X, y,
                                     # Giving names of variables (for display purposes)
-                                    X_names = [ "z"       , "v"        ],
+                                    X_names = args.X_names,
                                     # Giving units of input variables
-                                    X_units = [ [1, 0, 0] , [1, -1, 0] ],
+                                    X_units = args.X_units,
                                     # Giving name of root variable (for display purposes)
                                     y_name  = args.y_name,
                                     # Giving units of the root variable
                                     y_units = args.y_units,
                                     # Fixed constants
-                                    fixed_consts       = [ 1.      ],
+                                    fixed_consts = args.fixed_consts,
                                     # Units of fixed constants
-                                    fixed_consts_units = [ [0,0,0] ],
+                                    fixed_consts_units = args.fixed_consts_units,
                                     # Free constants names (for display purposes)
-                                    free_consts_names = [ "m"       , "g"        ],
+                                    free_consts_names = args.free_consts_names,
                                     # Units offFree constants
-                                    free_consts_units = [ [0, 0, 1] , [1, -2, 0] ],
+                                    free_consts_units = args.free_consts_units,
                                     # Run config
                                     run_config = physo.config.config0.config0,
         )
