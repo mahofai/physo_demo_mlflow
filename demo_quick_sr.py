@@ -93,7 +93,7 @@ if __name__ == '__main__':
                                     # Giving names of variables (for display purposes)
                                     X_names = [ "z"       , "v"        ],
                                     # Giving units of input variables
-                                    X_units = [ [1, 0, 0] , [1, -1, 0] ],
+                                    X_units = [ [1, 0, 0] , [1, -1, 2] ],
                                     # Giving name of root variable (for display purposes)
                                     y_name  = args.y_name,
                                     # Giving units of the root variable

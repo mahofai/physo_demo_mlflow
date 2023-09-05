@@ -1,6 +1,6 @@
-name: PhySO
+name: physo
 
-conda_env: PhySO.yml
+conda_env: physo.yml
 
 entry_points:
   main:
@@ -9,5 +9,5 @@ entry_points:
       y_units: { type: str, help: 'y unit', default :  "2 -2 1"}
     command: "python demo_quick_sr.py \
     --y_name {y_name} \
-    --y_units {y_units} \
     "
+    # --y_units {y_units} \
