@@ -17,7 +17,7 @@ import physo
 import argparse
 import pandas as pd
 import csv
-
+import json
 # using resource 
 import resource
   
@@ -32,7 +32,7 @@ parser.add_argument('--y_name', type=str, help='name of root variable', default 
 parser.add_argument('--y_units', type=lambda x: [float(i) for i in x.split()], help='units of the root variable', default = [2, -2, 1])
 
 parser.add_argument('--X_names', type=lambda x: [float(i) for i in x.split()], help='names of variables', default = [ "z"       , "v"        ])
-parser.add_argument('--X_units', type=lambda x: [float(i) for i in x.split()], help='nits of input variables', default = [ [1, 0, 0] , [1, -1, 2], ])
+parser.add_argument('--X_units', type=lambda x: json.loads(x), help='nits of input variables', default = [ [1, 0, 0] , [1, -1, 2], ])
 
 parser.add_argument('--fixed_consts', type=lambda x: [float(i) for i in x.split()], help='Fixed constants', default = [ 1.      ])
 parser.add_argument('--fixed_consts_units', type=lambda x: [float(i) for i in x.split()], help='Units of fixed constants', default = [ [0,0,0] ])
@@ -41,19 +41,20 @@ parser.add_argument('--free_consts_names', type=lambda x: [float(i) for i in x.s
 parser.add_argument('--free_consts_units', type=lambda x: [float(i) for i in x.split()], help='Units of Free constants', default = [ [0, 0, 1] , [1, -2, 0] ])
 
 args = parser.parse_args()
-
+ 
 # Guard for spawn systems (typically MACs/Windows)
 if __name__ == '__main__':
     # limit cpu memory usage as 4g
     limit_memory(1024*1024*1024*20)
+    print("args.X_units:",args.X_units)
 
     # ### Dataset
 
     # In[2]:
 
     # Dataset
-    z = np.random.uniform(-10, 10, 50)
-    v = np.random.uniform(-10, 10, 50)
+    z = np.random.uniform(-10, 10, 5)
+    v = np.random.uniform(-10, 10, 5)
     X = np.stack((z, v), axis=0)
     y = 1.234*9.807*z + 1.234*v**2
     print("X:",X)

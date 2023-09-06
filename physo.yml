@@ -1,4 +1,4 @@
-name: PhySO5
+name: PhySO6
 channels:
   - conda-forge/label/cf201901
   - conda-forge
@@ -354,4 +354,4 @@ dependencies:
       - werkzeug==2.3.6
       - widgetsnbextension==4.0.8
       - physo==1.0
-prefix: /user/mahaohui/miniconda3/envs/PhySO5
+prefix: /user/mahaohui/miniconda3/envs/PhySO6
