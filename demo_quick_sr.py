@@ -53,7 +53,12 @@ if __name__ == '__main__':
     free_consts_names = []
     free_consts_units = []
     
-    df = pd.read_csv(args.data)
+    parent_dir = os.path.dirname(os.path.dirname(__file__))
+    external_csv_path = os.path.join(parent_dir,'data',args.data)
+    if os.path.exists(external_csv_path):
+        df = pd.read_csv(external_csv_path)
+    else:
+        df = pd.read_csv(args.data)
     for column in df.columns:
         if "x_name" in column:
             X_names.append(column.split(":")[1])
@@ -206,7 +211,8 @@ if __name__ == '__main__':
         
         output_df = pd.read_csv("SR_curves_pareto.csv")
         for i in output_df.index:
-            mlflow.log_metric(f"expression_{i}:",output_df["expression"].iloc[i])
+            for j in output_df.columns:
+                mlflow.log_metric(f"expression_{i}:",output_df[j].iloc[i])
         
         # mlflow.log_table(data=df, artifact_file="SR_curves_pareto.csv")
 
