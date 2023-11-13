@@ -33,7 +33,7 @@ args = parser.parse_args()
 
 # Guard for spawn systems (typically MACs/Windows)
 if __name__ == '__main__':
-    
+
     # limit cpu memory usage as 4g
     limit_memory(1024*1024*1024*20)
 
@@ -45,15 +45,13 @@ if __name__ == '__main__':
     os.system(f"export PATH={texlive_path}/texlive/2023/bin/x86_64-linux:$PATH")
 
     # In[2]:
-    
     X_names = []
     X_units = []
     X_values = []
     fixed_consts = []
-    fixed_consts_units = [] 
+    fixed_consts_units = []
     free_consts_names = []
     free_consts_units = []
-    
     
     df = pd.read_csv(args.data)
     for column in df.columns:
@@ -84,8 +82,6 @@ if __name__ == '__main__':
     print("free_consts_names",free_consts_names)
     print("free_consts_units",free_consts_units)
     # exit()
-
-
 
 
     # Where $X=(z,v)$, $z$ being a length of dimension $L^{1}, T^{0}, M^{0}$, v a velocity of dimension $L^{1}, T^{-1}, M^{0}$, $y=E$ if an energy of dimension $L^{2}, T^{-2}, M^{1}$.
@@ -132,7 +128,7 @@ if __name__ == '__main__':
     # It should be noted that here the units vector are of size 3 (eg: `[1, 0, 0]`) as in this example the variables have units dependent on length, time and mass only.
     # However, units vectors can be of any size $\leq 7$ as long as it is consistent across X, y and constants, allowing the user to express any units (dependent on length, time, mass, temperature, electric current, amount of light, or amount of matter).
     # In addition, dimensional analysis can be performed regardless of the order in which units are given, allowing the user to use any convention ([length, mass, time] or [mass, time, length] etc.) as long as it is consistent across X,y and constants.
-
+    
     # In[4]:
     import physo
     with mlflow.start_run() as run:
@@ -205,10 +201,14 @@ if __name__ == '__main__':
             mlflow.log_text(str, f"pareto_front_expressions {i}")
         
         img_PIL = Image.open("SR_curves.png")
-        mlflow.log_image(img_PIL, "SR_curves.png")
+        # mlflow.log_metric()
+        # mlflow.log_image(img_PIL, "SR_curves.png")
         
         output_df = pd.read_csv("SR_curves_pareto.csv")
-        mlflow.log_table(data=df, artifact_file="SR_curves_pareto.csv")
+        for i in output_df.index:
+            mlflow.log_metric(f"expression_{i}:",output_df["expression"].iloc[i])
+        
+        # mlflow.log_table(data=df, artifact_file="SR_curves_pareto.csv")
 
         # In[ ]:
         mlflow.end_run()
