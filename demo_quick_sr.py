@@ -196,7 +196,6 @@ if __name__ == '__main__':
         pareto_front_complexities, pareto_front_expressions, pareto_front_r, pareto_front_rmse = logs.get_pareto_front()
         for i, prog in enumerate(pareto_front_expressions):
             # prog.show_infix(do_simplify=True)
-            image = prog.get_infix_image(do_simplify=True,fpath=f"image_{i}.png")
             str += prog.get_infix_pretty(do_simplify=True)+"\n"
             # Showing expression
             print(prog.get_infix_pretty(do_simplify=True))
@@ -217,6 +216,10 @@ if __name__ == '__main__':
         pd.set_option('display.max_columns', None)
         pd.set_option('display.max_rows', None)
         print("output:", output_df)
+        
+        for  i in output_df.index:
+            for j in output_df.columns:
+                mlflow.log_metric(f"{j}   {i}",0)
         
         # mlflow.log_table(data=df, artifact_file="SR_curves_pareto.csv")
 
