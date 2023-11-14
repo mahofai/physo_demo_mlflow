@@ -189,24 +189,19 @@ if __name__ == '__main__':
         # ### Inspecting pareto front expressions
 
         # In[6]:
-
+            
         # Inspecting pareto front expressions
         pareto_front_complexities, pareto_front_expressions, pareto_front_r, pareto_front_rmse = logs.get_pareto_front()
         for i, prog in enumerate(pareto_front_expressions):
-            # prog.show_infix(do_simplify=True)
-            str += prog.get_infix_pretty(do_simplify=True)+"\n"
             # Showing expression
             print(prog.get_infix_pretty(do_simplify=True))
             # Showing free constant
             free_consts = prog.free_const_values.detach().cpu().numpy()
             for j in range (len(free_consts)):
                 print("%s = %f"%(prog.library.free_const_names[j], free_consts[j]))
-                str += "!!!%s = %f"%(prog.library.free_const_names[j], free_consts[j])+"\n"
             # Showing RMSE
             print("RMSE = {:e}".format(pareto_front_rmse[i]))
-            str += "RMSE = {:e}".format(pareto_front_rmse[i])+"\n"
             print("-------------\n")
-            str += "-------------\n"+"\n"
         
         output_df = pd.read_csv("SR_curves_pareto.csv")
         
