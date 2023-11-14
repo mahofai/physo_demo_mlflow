@@ -18,8 +18,6 @@ if __name__ == '__main__':
         
         if package_name not in result.stdout:
             print("installing physo")
-            file_dir = os.path.dirname(__file__)
-            parent_dir = os.path.dirname(file_dir)
             # If the package is not available, install it using pip
             pip_install_cmd = f"pip install -e ."
             os.system(pip_install_cmd)
