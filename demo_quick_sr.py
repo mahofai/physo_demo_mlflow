@@ -176,11 +176,9 @@ if __name__ == '__main__':
         # In ascii
         print("\nIn ascii:")
         print(expression.get_infix_pretty(do_simplify=True))
-        mlflow.log_text( expression.get_infix_pretty(do_simplify=True),"In_ascii_info")
         # In latex
         print("\nIn latex")
         print(expression.get_infix_latex(do_simplify=True))
-        mlflow.log_text( expression.get_infix_latex(do_simplify=True),"\nIn latex")
         # Free constants values
         print("\nFree constants values")
         print(expression.free_const_values.cpu().detach().numpy())
