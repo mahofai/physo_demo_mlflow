@@ -53,11 +53,17 @@ if __name__ == '__main__':
     free_consts_names = []
     free_consts_units = []
     
-    parent_dir = os.path.dirname(os.path.dirname(__file__))
+    script_path = os.path.abspath(__file__)
+    file_dir = os.path.dirname(script_path)
+    parent_dir = os.path.dirname(file_dir)
+    print("parent_dir",parent_dir)
     external_csv_path = os.path.join(parent_dir,'data',args.data)
+    print("external_csv_path:",external_csv_path)
     if os.path.exists(external_csv_path):
+        print("load external csv...")
         df = pd.read_csv(external_csv_path)
     else:
+        print("try to find csv in git...")
         df = pd.read_csv(args.data)
     for column in df.columns:
         if "x_name" in column:
@@ -189,7 +195,8 @@ if __name__ == '__main__':
         # Inspecting pareto front expressions
         pareto_front_complexities, pareto_front_expressions, pareto_front_r, pareto_front_rmse = logs.get_pareto_front()
         for i, prog in enumerate(pareto_front_expressions):
-            str = ""
+            # prog.show_infix(do_simplify=True)
+            image = prog.get_infix_image(do_simplify=True,fpath=f"image_{i}.png")
             str += prog.get_infix_pretty(do_simplify=True)+"\n"
             # Showing expression
             print(prog.get_infix_pretty(do_simplify=True))
@@ -203,16 +210,13 @@ if __name__ == '__main__':
             str += "RMSE = {:e}".format(pareto_front_rmse[i])+"\n"
             print("-------------\n")
             str += "-------------\n"+"\n"
-            mlflow.log_text(str, f"pareto_front_expressions {i}")
-        
-        img_PIL = Image.open("SR_curves.png")
-        # mlflow.log_metric()
-        # mlflow.log_image(img_PIL, "SR_curves.png")
         
         output_df = pd.read_csv("SR_curves_pareto.csv")
-        for i in output_df.index:
-            for j in output_df.columns:
-                mlflow.log_metric(f"expression_{i}:",output_df[j].iloc[i])
+        
+        pd.set_option('display.max_colwidth', None)
+        pd.set_option('display.max_columns', None)
+        pd.set_option('display.max_rows', None)
+        print("output:", output_df)
         
         # mlflow.log_table(data=df, artifact_file="SR_curves_pareto.csv")
 
