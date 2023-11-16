@@ -78,7 +78,7 @@ if __name__ == '__main__':
             y_value = np.array(df[column][1:])
             y=[float(i) for i in y_value]
         elif "fix_const" in column:
-            fixed_consts.append(float(df[column][1]))
+            fixed_consts.append(float(column.split(":")[1]))
             fixed_consts_units.append(ast.literal_eval(df[column][0]))
         elif "free_const" in column:
             free_consts_names.append(column.split(":")[1])
