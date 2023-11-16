@@ -212,7 +212,7 @@ if __name__ == '__main__':
         
         for  i in output_df.index:
             for j in output_df.columns:
-                mlflow.log_metric(f"{j}   {output_df[i].iloc[i]}",0)
+                mlflow.log_metric(f"{j}   {output_df[j].iloc[i]}",0)
         
         # mlflow.log_table(data=df, artifact_file="SR_curves_pareto.csv")
 
