@@ -210,9 +210,15 @@ if __name__ == '__main__':
         pd.set_option('display.max_rows', None)
         print("output:", output_df)
         
-        for  i in output_df.index:
-            for j in output_df.columns:
-                mlflow.log_metric(f"{j}   {output_df[j].iloc[i]}",0)
+        for index, row in df.iterrows():
+            output_str = ""
+            print(f"Row {index}:")
+            for column, value in row.items():
+                print(f"{column} = {value}     ")
+                output_str+=f"{column}  {value}    "
+                mlflow.log_metric(output_str,0)
+        
+
         
         # mlflow.log_table(data=df, artifact_file="SR_curves_pareto.csv")
 
