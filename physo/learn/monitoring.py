@@ -642,12 +642,19 @@ class RunVisualiser:
                     latex_str = prog.library.superparent.name + ' =' + latex_str
 
 
-                ax.annotate(text = f'${latex_str}$',
+                # ax.annotate(text = f'${latex_str}$',
+                #             xy   = (text_pos[0], text_pos[1]),
+                #             size = eq_text_size,
+                #             ha   = "left",
+                #             va   = "bottom",
+                #            )
+
+                ax.annotate(s = f'${latex_str}$',
                             xy   = (text_pos[0], text_pos[1]),
                             size = eq_text_size,
                             ha   = "left",
                             va   = "bottom",
-                           )
+                           ) # type: ignore
             return fig
 
         fig = plot_pareto_front(self.run_logger)
