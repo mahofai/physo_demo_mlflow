@@ -202,13 +202,22 @@ if __name__ == '__main__':
             # Showing RMSE
             print("RMSE = {:e}".format(pareto_front_rmse[i]))
             print("-------------\n")
-        
+
         output_df = pd.read_csv("SR_curves_pareto.csv")
         
         pd.set_option('display.max_colwidth', None)
         pd.set_option('display.max_columns', None)
         pd.set_option('display.max_rows', None)
         print("output:", output_df)
+        
+        if os.path.exists("SR_curves_pareto.csv"):
+            mlflow.log_artifact("SR_curves_pareto.csv")
+        if os.path.exists("SR_curves_pareto.pdf"):
+            mlflow.log_artifact("SR_curves_pareto.pdf")
+        if os.path.exists("SR_curves.png"):
+            mlflow.log_artifact("SR_curves.png")
+        if os.path.exists("SR_curves_data.csv"):
+            mlflow.log_artifact("SR_curves_data.csv")
         
         # for index, row in output_df.iterrows():
         #     output_str = ""
