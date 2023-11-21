@@ -19,12 +19,10 @@ import physo
 # In[2]:
 
 if __name__ == '__main__':
-
     # Seed
     seed = 0
     np.random.seed(seed)
     torch.manual_seed(seed)
-
 
     # ### Dataset
 

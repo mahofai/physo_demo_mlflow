@@ -680,8 +680,9 @@ class RunVisualiser:
                     self.make_visualisation()
                 if self.do_save:
                     self.save_visualisation()
-            except:
+            except Exception as e:
                 print("Unable to make visualisation plots.")
+                print(e)
         # Data curves
         if epoch%self.epoch_refresh_rate == 0:
             try:
@@ -701,8 +702,9 @@ class RunVisualiser:
             try:
                 if self.do_save:
                     self.save_pareto_fig()
-            except:
+            except Exception as e:
                 print("Unable to save pareto figure.")
+                print(e)
         # Prints
         if epoch % self.epoch_refresh_rate_prints == 0:
             try:
