@@ -43,6 +43,9 @@ if __name__ == '__main__':
     os.system(f"export MANPATH={texlive_path}/texlive/2023/texmf-dist/doc/man:$MANPATH")
     os.system(f"export INFOPATH={texlive_path}/texlive/2023/texmf-dist/doc/info:$INFOPATH")
     os.system(f"export PATH={texlive_path}/texlive/2023/bin/x86_64-linux:$PATH")
+    
+    print("latex checking:",os.system("latex --help"))
+    
 
     # In[2]:
     X_names = []
