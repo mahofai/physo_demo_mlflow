@@ -44,8 +44,17 @@ if __name__ == '__main__':
     os.system(f"export INFOPATH={texlive_path}/texlive/2023/texmf-dist/doc/info:$INFOPATH")
     os.system(f"export PATH={texlive_path}/texlive/2023/bin/x86_64-linux:$PATH")
     
-    print("latex checking:",os.system("latex --help"))
-    
+
+    # Execute the command and capture the output
+    result = subprocess.run('latex --help', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+    # Print the output to the console
+    print("Output:")
+    print(result.stdout)
+
+    # Print the error (if any)
+    print("Error (if any):")
+    print(result.stderr)
 
     # In[2]:
     X_names = []
