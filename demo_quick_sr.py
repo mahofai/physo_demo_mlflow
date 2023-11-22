@@ -37,12 +37,26 @@ if __name__ == '__main__':
     # limit cpu memory usage as 4g
     limit_memory(1024*1024*1024*20)
 
-    # texlive_path = os.path.join(__file__.split("demo")[0],"latex")
+    # # texlive_path = os.path.join(__file__.split("demo")[0],"latex")
+    # texlive_path = "/user/mahaohui/autoML/PhySO/latex"
+    # print("texlive_path:",texlive_path)
+    # os.system(f"export MANPATH={texlive_path}/texlive/2023/texmf-dist/doc/man:$MANPATH")
+    # os.system(f"export INFOPATH={texlive_path}/texlive/2023/texmf-dist/doc/info:$INFOPATH")
+    # os.system(f"export PATH={texlive_path}/texlive/2023/bin/x86_64-linux:$PATH")
+
     texlive_path = "/user/mahaohui/autoML/PhySO/latex"
-    print("texlive_path:",texlive_path)
-    os.system(f"export MANPATH={texlive_path}/texlive/2023/texmf-dist/doc/man:$MANPATH")
-    os.system(f"export INFOPATH={texlive_path}/texlive/2023/texmf-dist/doc/info:$INFOPATH")
-    os.system(f"export PATH={texlive_path}/texlive/2023/bin/x86_64-linux:$PATH")
+    print("texlive_path:", texlive_path)
+
+    # Update the PATH environment variable
+    os.environ['PATH'] = f"{texlive_path}/texlive/2023/bin/x86_64-linux:" + os.environ['PATH']
+
+    # Update the MANPATH environment variable
+    os.environ['MANPATH'] = f"{texlive_path}/texlive/2023/texmf-dist/doc/man:" + os.environ.get('MANPATH', '')
+
+    # Update the INFOPATH environment variable
+    os.environ['INFOPATH'] = f"{texlive_path}/texlive/2023/texmf-dist/doc/info:" + os.environ.get('INFOPATH', '')
+
+    # Now the modified environment variables will be used for any subsequent commands executed in the script
     
 
     # Execute the command and capture the output
