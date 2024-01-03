@@ -238,8 +238,8 @@ if __name__ == '__main__':
         
         if os.path.exists("SR_curves_pareto.csv"):
             mlflow.log_artifact("SR_curves_pareto.csv")
-        if os.path.exists("SR_curves_pareto.pdf"):
-            mlflow.log_artifact("SR_curves_pareto.pdf")
+        # if os.path.exists("SR_curves_pareto.pdf"):
+        #     mlflow.log_artifact("SR_curves_pareto.pdf")
         if os.path.exists("SR_curves.png"):
             mlflow.log_artifact("SR_curves.png")
         if os.path.exists("SR_curves_data.csv"):
